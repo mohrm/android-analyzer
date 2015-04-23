@@ -1,4 +1,4 @@
-package test;
+package edu.kit.jodroid.io.test;
 
 import java.io.IOException;
 

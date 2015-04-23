@@ -12,8 +12,6 @@ import java.util.jar.JarFile;
 
 import org.json.JSONException;
 
-import policy.IFCPolicy;
-
 import com.ibm.wala.classLoader.IClass;
 import com.ibm.wala.classLoader.IMethod;
 import com.ibm.wala.classLoader.JarFileModule;
@@ -65,6 +63,7 @@ import edu.kit.jodroid.ifc.AndroidIFCAnalysis;
 import edu.kit.jodroid.ifc.PrepareAnnotation;
 import edu.kit.jodroid.io.AppSpec;
 import edu.kit.jodroid.io.ParsePolicyFromJSON;
+import edu.kit.jodroid.policy.IFCPolicy;
 
 public class AndroidAnalysis {
 	public static final String JDK_STUBS = "jdkstubs";

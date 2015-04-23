@@ -7,8 +7,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import policy.IFCPolicy;
-
 import com.ibm.wala.classLoader.IClass;
 import com.ibm.wala.classLoader.IMethod;
 import com.ibm.wala.ipa.callgraph.CallGraph;
@@ -33,6 +31,7 @@ import edu.kit.jodroid.io.ParsePolicyFromJSON.Sink;
 import edu.kit.jodroid.io.ParsePolicyFromJSON.Source;
 import edu.kit.jodroid.io.ParsePolicyFromJSON.SourceOrSink;
 import edu.kit.jodroid.io.ParsePolicyFromJSON.SourceOrSink.Visitor;
+import edu.kit.jodroid.policy.IFCPolicy;
 
 public class PrepareAnnotation {
 	private CallGraph callGraph;

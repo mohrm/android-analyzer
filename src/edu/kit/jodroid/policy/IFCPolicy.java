@@ -1,4 +1,4 @@
-package policy;
+package edu.kit.jodroid.policy;
 
 import java.util.HashSet;
 import java.util.LinkedList;
