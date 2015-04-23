@@ -1,11 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project name="android-analyzer" default="compile" basedir=".">
+<project name="android-analyzer" default="jar" basedir=".">
 	<description>
 		Build script for the Joana Android Analyzer
 	</description>
 
 	<property name="sources" value="src" />
 	<property name="classes" value="classes"/>
+	<property name="jar.file" value="android-analyzer.jar"/>
 
 	<target name="compile">
 		<mkdir dir="${classes}"/>
@@ -18,14 +19,21 @@
             srcdir="${sources}"
             destdir="${classes}"
             verbose="no"
-            source="1.7"
-            target="1.7"
             encoding="utf-8"
             classpathref="lib.path.ref"
 		/>		
 	</target>
+	
+	<target name="jar" depends="compile">
+		<delete file="${jar.file}"/>
+		<jar jarfile="${jar.file}">
+			<fileset dir="${classes}"/>
+		</jar>
+	</target>
+
 
 	<target name="clean">
-		<rmdir dir="${classes}"/>
+		<delete dir="${classes}"/>
+		<delete file="${jar.file}"/>
 	</target>
 </project>
