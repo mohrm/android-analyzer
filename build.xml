@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="android-analyzer" default="compile" basedir=".">
+	<description>
+		Build script for the Joana Android Analyzer
+	</description>
+
+	<property name="sources" value="src" />
+	<property name="classes" value="classes"/>
+
+	<target name="compile">
+		<mkdir dir="${classes}"/>
+		<path id="lib.path.ref">
+			<fileset dir="lib" includes="*.jar" />
+		</path>
+
+		<javac
+            includeantruntime="false"
+            srcdir="${sources}"
+            destdir="${classes}"
+            verbose="no"
+            source="1.7"
+            target="1.7"
+            encoding="utf-8"
+            classpathref="lib.path.ref"
+		/>
+		
+</target>
+</project>
