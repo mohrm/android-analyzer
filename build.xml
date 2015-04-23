@@ -22,7 +22,10 @@
             target="1.7"
             encoding="utf-8"
             classpathref="lib.path.ref"
-		/>
-		
-</target>
+		/>		
+	</target>
+
+	<target name="clean">
+		<rmdir dir="${classes}"/>
+	</target>
 </project>
