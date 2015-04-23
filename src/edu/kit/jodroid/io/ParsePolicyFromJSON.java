@@ -229,7 +229,7 @@ public class ParsePolicyFromJSON {
 	}
 	
 	private List<String> getCategories(JSONObject srcsOrSnks) {
-		Iterator<String> iter = srcsOrSnks.keys();
+		@SuppressWarnings("unchecked") Iterator<String> iter = srcsOrSnks.keys();
 		List<String> ret = new LinkedList<String>();
 		while (iter.hasNext()) {
 			ret.add(iter.next());
@@ -239,7 +239,7 @@ public class ParsePolicyFromJSON {
 	
 	private List<Source> getArgumentSensitiveSources(JSONObject aSG) throws JSONException {
 		// uASG is a map className -> (methodName -> Array<ParameterIndex>)
-		Iterator<String> classNames = aSG.keys();
+		@SuppressWarnings("unchecked") Iterator<String> classNames = aSG.keys();
 		List<Source> ret = new LinkedList<Source>();
 		while (classNames.hasNext()) {
 			String nextClassName = classNames.next();
@@ -251,7 +251,7 @@ public class ParsePolicyFromJSON {
 	
 	private List<Source> getArgumentSensitiveSourcesForClass(JSONObject aSG4C, String className) throws JSONException {
 		// aSG is a map methodName -> Array<ParameterIndex>
-		Iterator<String> methodNames = aSG4C.keys();
+		@SuppressWarnings("unchecked") Iterator<String> methodNames = aSG4C.keys();
 		List<Source> ret = new LinkedList<Source>();
 		while (methodNames.hasNext()) {
 			String nextMethodName = methodNames.next();
@@ -273,7 +273,7 @@ public class ParsePolicyFromJSON {
 	
 	private List<Source> getSources(JSONObject sources) throws JSONException {
 		// sources contains a map categoryName -> (className --"getters"--> Array<Method>) 
-		Iterator<String> categoryNames = sources.keys();
+		@SuppressWarnings("unchecked") Iterator<String> categoryNames = sources.keys();
 		List<Source> ret = new LinkedList<Source>();
 		while (categoryNames.hasNext()) {
 			String nextCatName = categoryNames.next();
@@ -284,7 +284,7 @@ public class ParsePolicyFromJSON {
 	
 	private List<Source> getSourcesForCategory(String category, JSONObject srcsForCat) throws JSONException {
 		// srcsForCat contains a map className --"getters"--> Array<Method>
-		Iterator<String> classNames = srcsForCat.keys();
+		@SuppressWarnings("unchecked") Iterator<String> classNames = srcsForCat.keys();
 		List<Source> ret = new LinkedList<Source>();
 		while (classNames.hasNext()) {
 			String nextClass = classNames.next();
@@ -339,7 +339,7 @@ public class ParsePolicyFromJSON {
 
 	private List<Sink> getSinks(JSONObject sinks) throws JSONException {
 		// sinks contains a map categoryName -> (className --"setters"--> Array<Method>) 
-		Iterator<String> categoryNames = sinks.keys();
+		@SuppressWarnings("unchecked") Iterator<String> categoryNames = sinks.keys();
 		List<Sink> ret = new LinkedList<Sink>();
 		while (categoryNames.hasNext()) {
 			String nextCatName = categoryNames.next();
@@ -350,7 +350,7 @@ public class ParsePolicyFromJSON {
 	
 	private List<Sink> getSinksForCategory(String category, JSONObject snksForCat) throws JSONException {
 		// srcsForCat contains a map className --"getters"--> Array<Method>
-		Iterator<String> classNames = snksForCat.keys();
+		@SuppressWarnings("unchecked") Iterator<String> classNames = snksForCat.keys();
 		List<Sink> ret = new LinkedList<Sink>();
 		while (classNames.hasNext()) {
 			String nextClass = classNames.next();
@@ -384,8 +384,9 @@ public class ParsePolicyFromJSON {
 		return ret;
 	}
 	
+	
 	private static Set<String> keySet(JSONObject o) {
-		Iterator<String> i = o.keys();
+		@SuppressWarnings("unchecked") Iterator<String> i = o.keys();
 		Set<String> ret = new HashSet<String>();
 		while (i.hasNext()) {
 			String next = i.next();
