@@ -171,7 +171,7 @@ public class AndroidAnalysis {
 		scfg.localKillingDefs = false;
 		SDG sdg = SDGBuilder.build(scfg);
 		SDGSerializer.toPDGFormat(sdg, new FileOutputStream(new File(appSpec.apkFile).getParent() + "/app.pdg"));
-		IFCPolicy policy = new ParsePolicyFromJSON("res/policytemplate.json").run();
+		IFCPolicy policy = new ParsePolicyFromJSON(properties.getProperty(POLICY_TEMPLATE)).run();
 		PrepareAnnotation prepare = new PrepareAnnotation(keeper.getCallGraph(), sdg, policy);
 		AndroidIFCAnalysis ifc = new AndroidIFCAnalysis(sdg, prepare.computeAnnotation());
 		return ifc;
