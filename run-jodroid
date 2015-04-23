@@ -1,0 +1,1 @@
+java -Xmx4G -cp lib/json.jar:lib/joana.wala.jodroid.jar:lib/joana.api.jar:bin MainAnalysis

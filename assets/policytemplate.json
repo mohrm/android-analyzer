@@ -1,0 +1,216 @@
+{
+"uriArgumentSensitiveGetters":{
+	"Landroid/app/Activity;": {
+		"managedQuery(Landroid/net/Uri;[Ljava/lang/String;Ljava/lang/String;[Ljava/lang/String;Ljava/lang/String;)":["1"]
+	},
+	"Landroid/content/ContentProvider;": {
+		"query(Landroid/net/Uri;[Ljava/lang/String;Ljava/lang/String;[Ljava/lang/String;Ljava/lang/String;)":["1"]
+	},
+	"Landroid/content/ContentResolver;": {
+		"query(Landroid/net/Uri;[Ljava/lang/String;Ljava/lang/String;[Ljava/lang/String;Ljava/lang/String;)":["1"]
+	}
+},
+"stringArgumentSensitiveGetters":{
+	"Landroid/content/Intent;": {
+		"getBooleanArrayExtra(Ljava/lang/String;)":["1"],
+		"getBooleanExtra(Ljava/lang/String;Z)":["1"],
+		"getBundleExtra(Ljava/lang/String;)":["1"],
+		"getByteArrayExtra(Ljava/lang/String;)":["1"],
+		"getByteExtra(Ljava/lang/String;B)":["1"],
+		"getCharArrayExtra(Ljava/lang/String;)":["1"],
+		"getCharExtra(Ljava/lang/String;C)":["1"],
+		"getCharSequenceArrayExtra(Ljava/lang/String;)":["1"],
+		"getCharSequenceArrayListExtra(Ljava/lang/String;)":["1"],
+		"getCharSequenceExtra(Ljava/lang/String;)":["1"],
+		"getDoubleArrayExtra(Ljava/lang/String;)":["1"],
+		"getDoubleExtra(Ljava/lang/String;D)":["1"],
+		"getFloatArrayExtra(Ljava/lang/String;)":["1"],
+		"getFloatExtra(Ljava/lang/String;F)":["1"],
+		"getIntArrayExtra(Ljava/lang/String;)":["1"],
+		"getIntExtra(Ljava/lang/String;I)":["1"],
+		"getIntegerArrayListExtra(Ljava/lang/String;)":["1"],
+		"getLongArrayExtra(Ljava/lang/String;)":["1"],
+		"getLongExtra(Ljava/lang/String;J)":["1"],
+		"getParcelableArrayExtra(Ljava/lang/String;)":["1"],
+		"getParcelableArrayListExtra(Ljava/lang/String;)":["1"],
+		"getParcelableExtra(Ljava/lang/String;)":["1"],
+		"getSerializableExtra(Ljava/lang/String;)":["1"],
+		"getShortArrayExtra(Ljava/lang/String;)":["1"],
+		"getShortExtra(Ljava/lang/String;S)":["1"],
+		"getStringArrayExtra(Ljava/lang/String;)":["1"],
+		"getStringArrayListExtra(Ljava/lang/String;)":["1"],
+		"getStringExtra(Ljava/lang/String;)":["1"]
+	}
+},
+"sources":{
+	"account": {
+		"Landroid/accounts/AccountManager;": {
+			"getters": [
+				"getAuthToken(Landroid/accounts/Account;Ljava/lang/String;Landroid/os/Bundle;Landroid/app/Activity;Landroid/accounts/AccountManagerCallback;Landroid/os/Handler;)"
+			]
+		}
+	},
+	"browser": {
+		"Landroid/provider/Browser;": {
+			"getters": [
+				"getAllBookmarks(Landroid/content/ContentResolver;)",
+				"getAllVisitedUrls(Landroid/content/ContentResolver;)"
+			],
+			"forbiddenUris": [
+				"content://browser/bookmarks",
+				"content://browser/searches"
+			]
+		}
+	},
+	"calendarAndContacts": {
+		"Landroid/provider/ContactsContract$Contacts;": {
+			"forbiddenUris": [
+				"content://com.android.contacts/contacts",
+				"content://com.android.contacts/contacts/frequent",
+				"content://com.android.contacts/contacts/filter",
+				"content://com.android.contacts/contacts/group",
+				"content://com.android.contacts/contacts/lookup",
+				"content://com.android.contacts/contacts/strequent/filter",
+				"content://com.android.contacts/contacts/strequent",
+				"content://com.android.contacts/contacts/as_vcard",
+				"content://com.android.contacts/contacts/as_multi_vcard"
+			]
+		},
+		"Landroid/provider/ContactsContract$CommonDataKinds$Email;": {
+			"forbiddenUris": [
+				"content://com.android.contacts/contacts/data/emails"
+			]
+		}
+	},
+	"device": {
+		"Landroid/telephony/TelephonyManager;": {
+			"getters": [
+				"getDeviceId()",
+				"getDeviceSoftwareVersion()",
+				"getLine1Number()",
+				"getNetworkCountryIso()",
+				"getSubscriberId()"
+			]
+		}
+	},
+	"installedSoftware": {
+	},
+	"location": {
+		"Landroid/location/LocationListener;": {
+			"entryPoints": {
+				"onLocationChanged(Landroid/location/Location;)":"h"
+			}
+		},
+		"Landroid/location/LocationManager;": {
+			"getters": [
+				"getLastKnownLocation(Ljava/lang/String;)"
+			]
+		},
+		"Landroid/telephony/PhoneStateListener;": {
+			"entryPoints": {
+				"onCellLocationChanged(Landroid/telephony/CellLocation;)":"h"
+			}
+		},
+		"Landroid/telephony/TelephonyManager;": {
+			"getters": [
+				"getCellLocation()",
+				"getNeighboringCellInfo()",
+				"getNetworkCountryIso()"
+			]
+		}
+	},
+	"telephony": {
+		"Landroid/content/Intent;": {
+			"forbiddenStrings": [
+				"android.intent.extra.PHONE_NUMBER"
+			]
+		},
+		"Landroid/telephony/PhoneNumberUtils;": {
+			"getters": [
+				"getNumberFromIntent(Landroid/content/Intent;Landroid/content/Context;)"
+			]
+		},
+		"Landroid/telephony/PhoneStateListener;": {
+			"entryPoints": {
+				"onCallStateChanged(ILjava/lang/String;)":"lh"
+			}
+		},
+		"Landroid/telephony/TelephonyManager;": {
+			"forbiddenStrings": [
+				"incoming_number"
+			],
+			"getters": [
+				"getLine1Number()",
+				"getNetworkOperator()",
+				"getNetworkOperatorName()",
+				"getSimCountryIso()",
+				"getSimOperator()",
+				"getSimOperatorName()",
+				"getSimSerialNumber()",
+				"getSubscriberId()",
+				"getVoiceMailAlphaTag()",
+				"getVoiceMailNumber()"
+			]
+		}
+	}
+},
+"sinks":{
+	"contentProviders": {
+		"Landroid/content/ContentResolver;": {
+			"setters": [
+				"insert(Landroid/net/Uri;Landroid/content/ContentValues;)",
+				"update(Landroid/net/Uri;Landroid/content/ContentValues;Ljava/lang/String;[Ljava/lang/String;)"
+			]
+		}
+	},
+	"filesAndNetwork": {
+		"Ljava/io/FileOutputStream;": {
+			"setters": [
+				"<init>(Ljava/lang/String;)"
+			]
+		},
+		"Ljava/io/Writer;": {
+			"setters": [
+				"write(Ljava/lang/String;)"
+			]
+		},
+		"Ljava/net/Socket;": {
+			"setters": [
+				"<init>(Ljava/lang/String;I)"
+			]
+		}
+	},
+	"otherApps": {
+		"Landroid/content/ContextWrapper;": {
+			"setters": [
+				"sendBroadcast(Landroid/content/Intent;)",
+				"startService(Landroid/content/Intent;)"
+			]
+		},
+		"Landroid/app/Activity;": {
+			"setters": [
+				"startActivity(Landroid/content/Intent;)"
+			]
+		},
+		"Landroid/content/Context;": {
+			"setters": [
+				"sendBroadcast(Landroid/content/Intent;)",
+				"startActivity(Landroid/content/Intent;)",
+				"startService(Landroid/content/Intent;)"
+			]
+		}
+	},
+	"sms": {
+		"Landroid/telephony/SmsManager;": {
+			"setters": [
+				"sendTextMessage(Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Landroid/app/PendingIntent;Landroid/app/PendingIntent;)"
+			]
+		},
+		"Landroid/telephony/gsm/SmsManager;": {
+			"setters": [
+				"sendTextMessage(Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Landroid/app/PendingIntent;Landroid/app/PendingIntent;)"
+			]
+		}
+	}
+}
+}
