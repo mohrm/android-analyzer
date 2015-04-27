@@ -113,12 +113,12 @@ public class AndroidAnalysis {
 	private static TypeReference WebViewClient = TypeReference.findOrCreate(ClassLoaderReference.Primordial, "Landroid/webkit/WebViewClient");
 	private static Selector run = Selector.make("run()V");
 
-	public AndroidIFCAnalysis runAnalysis(File apkFile) throws IOException, CancelException, UnsoundGraphException, WalaException, JSONException, InterruptedException, BrutException {
+	public AndroidIFCAnalysis buildAnalysis(File apkFile) throws IOException, CancelException, UnsoundGraphException, WalaException, JSONException, InterruptedException, BrutException {
 		File manifestFile = MainAnalysis.extractManifest(apkFile);
-		return runAnalysis(new AppSpec(apkFile, manifestFile));
+		return buildAnalysis(new AppSpec(apkFile, manifestFile));
 	}
 
-	public AndroidIFCAnalysis runAnalysis(AppSpec appSpec) throws IOException, CancelException, UnsoundGraphException, WalaException, JSONException {
+	public AndroidIFCAnalysis buildAnalysis(AppSpec appSpec) throws IOException, CancelException, UnsoundGraphException, WalaException, JSONException {
 		AnalysisScope scope = makeMinimalScope(appSpec);
 		IClassHierarchy cha = ClassHierarchy.make(scope);
 		AnalysisCache cache = new AnalysisCache(new DexIRFactory());

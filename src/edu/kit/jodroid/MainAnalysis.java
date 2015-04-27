@@ -34,7 +34,7 @@ public class MainAnalysis {
 		for (AppSpec appSpec : appSpecs) {
 			try {
 				System.out.print("Test on " + appSpec + "...");
-				AndroidIFCAnalysis ifcAnalysis = a.runAnalysis(appSpec);
+				AndroidIFCAnalysis ifcAnalysis = a.buildAnalysis(appSpec);
 				IFCReport report = ifcAnalysis.check();
 				report.print(System.out);
 				System.out.println("SUCCESS");
