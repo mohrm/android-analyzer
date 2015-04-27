@@ -20,7 +20,9 @@
             destdir="${classes}"
             verbose="no"
             encoding="utf-8"
-            classpathref="lib.path.ref"
+			classpathref="lib.path.ref"
+			source="1.7"
+			target="1.7"
 		/>		
 	</target>
 	
