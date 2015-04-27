@@ -206,14 +206,13 @@ public class ParsePolicyFromJSON {
 		}
 	}
 	
-	private String fileName;
+	private File policyFile;
 	
-	public ParsePolicyFromJSON(String fileName) {
-		this.fileName = fileName;
+	public ParsePolicyFromJSON(File file) {
+		this.policyFile = file;
 	}
 
 	public IFCPolicy run() throws IOException, JSONException {
-		File policyFile = new File(fileName);
 		String s = readFromFile(policyFile);
 		JSONObject p = new JSONObject(s);
 		JSONObject uASG = p.getJSONObject("uriArgumentSensitiveGetters");

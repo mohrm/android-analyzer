@@ -184,7 +184,7 @@ public class AndroidAnalysis {
 		scfg.localKillingDefs = false;
 		SDG sdg = SDGBuilder.build(scfg);
 		SDGSerializer.toPDGFormat(sdg, new FileOutputStream(appSpec.apkFile.getParent() + "/app.pdg"));
-		IFCPolicy policy = new ParsePolicyFromJSON(properties.getProperty(POLICY_TEMPLATE)).run();
+		IFCPolicy policy = new ParsePolicyFromJSON(loadJSONPolicy()).run();
 		PrepareAnnotation prepare = new PrepareAnnotation(keeper.getCallGraph(), sdg, policy);
 		AndroidIFCAnalysis ifc = new AndroidIFCAnalysis(sdg, prepare.computeAnnotation());
 		return ifc;
@@ -194,13 +194,26 @@ public class AndroidAnalysis {
 		AnalysisScope scope = AnalysisScope.createJavaAnalysisScope();
 		scope.setLoaderImpl(ClassLoaderReference.Primordial, "com.ibm.wala.dalvik.classLoader.WDexClassLoaderImpl");
 		scope.setLoaderImpl(ClassLoaderReference.Application, "com.ibm.wala.dalvik.classLoader.WDexClassLoaderImpl");
-		scope.addToScope(ClassLoaderReference.Primordial, new JarFileModule(new JarFile(properties.getProperty(JDK_STUBS))));
-		scope.addToScope(ClassLoaderReference.Primordial, new JarFileModule(
-				new JarFile(properties.getProperty(ANDROID_LIB))));
+		scope.addToScope(ClassLoaderReference.Primordial, new JarFileModule(loadJDKStubs()));
+		scope.addToScope(ClassLoaderReference.Primordial, new JarFileModule(loadAndroidLib()));
 		scope.addToScope(ClassLoaderReference.Application, DexFileModule.make(appSpec.apkFile));
 		return scope;
 	}
 
+	public static JarFile loadJDKStubs() throws IOException {
+		String jdkStubs = properties.getProperty(JDK_STUBS);
+		return new JarFile(AndroidAnalysis.class.getClassLoader().getResource(jdkStubs).getFile());
+	}
+
+	public static JarFile loadAndroidLib() throws IOException {
+		String androidLib = properties.getProperty(ANDROID_LIB);
+		return new JarFile(AndroidAnalysis.class.getClassLoader().getResource(androidLib).getFile());
+	}
+
+	public static File loadJSONPolicy() throws IOException {
+		String jsonPolicy = properties.getProperty(POLICY_TEMPLATE);
+		return new File(AndroidAnalysis.class.getClassLoader().getResource(jsonPolicy).getFile());
+	}
 	private AnalysisOptions configureOptions(AnalysisScope scope, IClassHierarchy cha) {
 		AnalysisOptions options = new AnalysisOptions(scope, null);
 		options.setReflectionOptions(ReflectionOptions.FULL);
