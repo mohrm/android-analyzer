@@ -52,6 +52,7 @@ import com.ibm.wala.util.graph.GraphIntegrity.UnsoundGraphException;
 
 import edu.kit.joana.ifc.sdg.graph.SDG;
 import edu.kit.joana.ifc.sdg.graph.SDGSerializer;
+import edu.kit.joana.util.Pair;
 import edu.kit.joana.wala.core.CGConsumer;
 import edu.kit.joana.wala.core.ExternalCallCheck;
 import edu.kit.joana.wala.core.SDGBuilder;
@@ -118,6 +119,11 @@ public class AndroidAnalysis {
 		return buildAnalysis(new AppSpec(apkFile, manifestFile));
 	}
 
+	public Set<Pair<String, String>> runAnalysis(File apkFile) throws IOException, CancelException, UnsoundGraphException, WalaException, JSONException, InterruptedException, BrutException {
+		AndroidIFCAnalysis a = buildAnalysis(apkFile);
+		return a.check().getFlows();
+	}
+	
 	public AndroidIFCAnalysis buildAnalysis(AppSpec appSpec) throws IOException, CancelException, UnsoundGraphException, WalaException, JSONException {
 		AnalysisScope scope = makeMinimalScope(appSpec);
 		IClassHierarchy cha = ClassHierarchy.make(scope);
