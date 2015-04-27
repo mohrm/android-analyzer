@@ -73,7 +73,7 @@ public class MainAnalysis {
 		}
 	}
 
-	private static String extractManifest(File apkFile) throws IOException, InterruptedException, BrutException {
+	public static String extractManifest(File apkFile) throws IOException, InterruptedException, BrutException {
 		String[] args = new String[] {"d", "-f", apkFile.getAbsolutePath(), "-o", apkFile.getParent() + "/apktool"};
 		System.out.println(Arrays.toString(args));
 		brut.apktool.Main.main(args);
