@@ -76,7 +76,7 @@ public class AndroidAnalysis {
 	static Properties properties;
 	
 	static {
-		File file = new File("res/jodroid.properties");
+		File file = new File(AndroidAnalysis.class.getClassLoader().getResource("jodroid.properties").getFile());
 		FileInputStream fileInput = null;
 		try {
 			fileInput = new FileInputStream(file);
