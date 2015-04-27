@@ -114,7 +114,7 @@ public class AndroidAnalysis {
 	private static Selector run = Selector.make("run()V");
 
 	public AndroidIFCAnalysis runAnalysis(File apkFile) throws IOException, CancelException, UnsoundGraphException, WalaException, JSONException, InterruptedException, BrutException {
-		String manifestFile = MainAnalysis.extractManifest(apkFile);
+		File manifestFile = MainAnalysis.extractManifest(apkFile);
 		return runAnalysis(new AppSpec(apkFile, manifestFile));
 	}
 
@@ -125,7 +125,7 @@ public class AndroidAnalysis {
 		AnalysisOptions options = configureOptions(scope, cha);
 		populateEntryPoints(cha);
 		if (appSpec.manifestFile != null) {
-			new AndroidManifestXMLReader(new File(appSpec.manifestFile));
+			new AndroidManifestXMLReader(appSpec.manifestFile);
 		}
 		System.out.println(AndroidEntryPointManager.MANAGER.getSeen());
 		IMethod lifecycle;

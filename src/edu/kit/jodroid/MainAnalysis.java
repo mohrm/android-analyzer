@@ -64,7 +64,7 @@ public class MainAnalysis {
 	private static void addAllAppsTo(String root, List<AppSpec> base) throws IOException, InterruptedException, BrutException {
 		File f = new File(root);
 		if (f.isFile() && f.getName().endsWith("apk")) {
-			String manifestFile = extractManifest(f);
+			File manifestFile = extractManifest(f);
 			base.add(new AppSpec(f, manifestFile));
 		} else if (f.isDirectory()) {
 			for (File g : f.listFiles()) {
@@ -73,11 +73,11 @@ public class MainAnalysis {
 		}
 	}
 
-	public static String extractManifest(File apkFile) throws IOException, InterruptedException, BrutException {
+	public static File extractManifest(File apkFile) throws IOException, InterruptedException, BrutException {
 		String[] args = new String[] {"d", "-f", apkFile.getAbsolutePath(), "-o", apkFile.getParent() + "/apktool"};
 		System.out.println(Arrays.toString(args));
 		brut.apktool.Main.main(args);
-		return apkFile.getParent() + "/apktool/AndroidManifest.xml";
+		return new File(apkFile.getParent() + "/apktool/AndroidManifest.xml");
 	}
 
 	public static void runAnalysisOn(AppSpec appSpec) {

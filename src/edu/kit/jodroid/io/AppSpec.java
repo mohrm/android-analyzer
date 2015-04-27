@@ -4,9 +4,9 @@ import java.io.File;
 
 public class AppSpec {
 	public final File apkFile;
-	public final String manifestFile;
+	public final File manifestFile;
 
-	public AppSpec(File apkFile, String manifestFile) {
+	public AppSpec(File apkFile, File manifestFile) {
 		this.apkFile = apkFile;
 		this.manifestFile = manifestFile;
 	}
