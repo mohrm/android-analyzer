@@ -64,9 +64,8 @@ public class MainAnalysis {
 	private static void addAllAppsTo(String root, List<AppSpec> base) throws IOException, InterruptedException, BrutException {
 		File f = new File(root);
 		if (f.isFile() && f.getName().endsWith("apk")) {
-			String apkFile = root;
 			String manifestFile = extractManifest(f);
-			base.add(new AppSpec(apkFile, manifestFile));
+			base.add(new AppSpec(f, manifestFile));
 		} else if (f.isDirectory()) {
 			for (File g : f.listFiles()) {
 				addAllAppsTo(g.getAbsolutePath(), base);

@@ -12,6 +12,8 @@ import java.util.jar.JarFile;
 
 import org.json.JSONException;
 
+import brut.common.BrutException;
+
 import com.ibm.wala.classLoader.IClass;
 import com.ibm.wala.classLoader.IMethod;
 import com.ibm.wala.classLoader.JarFileModule;
@@ -170,7 +172,7 @@ public class AndroidAnalysis {
 		scfg.additionalContextInterpreter = new IntentContextInterpreter(cha, options, cache);
 		scfg.localKillingDefs = false;
 		SDG sdg = SDGBuilder.build(scfg);
-		SDGSerializer.toPDGFormat(sdg, new FileOutputStream(new File(appSpec.apkFile).getParent() + "/app.pdg"));
+		SDGSerializer.toPDGFormat(sdg, new FileOutputStream(appSpec.apkFile.getParent() + "/app.pdg"));
 		IFCPolicy policy = new ParsePolicyFromJSON(properties.getProperty(POLICY_TEMPLATE)).run();
 		PrepareAnnotation prepare = new PrepareAnnotation(keeper.getCallGraph(), sdg, policy);
 		AndroidIFCAnalysis ifc = new AndroidIFCAnalysis(sdg, prepare.computeAnnotation());
@@ -184,7 +186,7 @@ public class AndroidAnalysis {
 		scope.addToScope(ClassLoaderReference.Primordial, new JarFileModule(new JarFile(properties.getProperty(JDK_STUBS))));
 		scope.addToScope(ClassLoaderReference.Primordial, new JarFileModule(
 				new JarFile(properties.getProperty(ANDROID_LIB))));
-		scope.addToScope(ClassLoaderReference.Application, DexFileModule.make(new File(appSpec.apkFile)));
+		scope.addToScope(ClassLoaderReference.Application, DexFileModule.make(appSpec.apkFile));
 		return scope;
 	}
 

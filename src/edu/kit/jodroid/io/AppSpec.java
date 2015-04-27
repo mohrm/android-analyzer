@@ -1,10 +1,12 @@
 package edu.kit.jodroid.io;
 
+import java.io.File;
+
 public class AppSpec {
-	public final String apkFile;
+	public final File apkFile;
 	public final String manifestFile;
 
-	public AppSpec(String apkFile, String manifestFile) {
+	public AppSpec(File apkFile, String manifestFile) {
 		this.apkFile = apkFile;
 		this.manifestFile = manifestFile;
 	}
@@ -49,6 +51,6 @@ public class AppSpec {
 
 	@Override
 	public String toString() {
-		return apkFile;
+		return apkFile.getAbsolutePath();
 	}
 }
