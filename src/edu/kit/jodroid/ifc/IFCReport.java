@@ -2,7 +2,9 @@ package edu.kit.jodroid.ifc;
 
 import java.io.PrintStream;
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 
 import edu.kit.joana.ifc.sdg.core.violations.ClassifiedViolation;
 import edu.kit.joana.util.Pair;
@@ -30,5 +32,9 @@ public class IFCReport {
 				}
 			}
 		}
+	}
+
+	public Set<Pair<String, String>> getFlows() {
+		return new HashSet<Pair<String, String>>(vioMap.keySet());
 	}
 }

@@ -1,11 +1,14 @@
 package edu.kit.jodroid;
 import java.io.File;
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+
+import brut.common.BrutException;
 
 import com.ibm.wala.ipa.cha.ClassHierarchyException;
 import com.ibm.wala.util.CancelException;
@@ -19,7 +22,7 @@ public class MainAnalysis {
 	
 	
 	
-	public static void main(String[] args) throws IOException, ClassHierarchyException, CancelException, UnsoundGraphException {
+	public static void main(String[] args) throws IOException, ClassHierarchyException, CancelException, UnsoundGraphException, InterruptedException, BrutException {
 		runAnalysisOn(listApps("examples/apps"));
 		// runAnalysisOn("/home/mmohr-local/workspaces/ws-android/Simple1/Simple1.apk");
 	}
@@ -52,17 +55,17 @@ public class MainAnalysis {
 		}
 	}
 
-	public static List<AppSpec> listApps(String root) {
+	public static List<AppSpec> listApps(String root) throws IOException, InterruptedException, BrutException {
 		LinkedList<AppSpec> ret = new LinkedList<AppSpec>();
 		addAllAppsTo(root, ret);
 		return ret;
 	}
 
-	private static void addAllAppsTo(String root, List<AppSpec> base) {
+	private static void addAllAppsTo(String root, List<AppSpec> base) throws IOException, InterruptedException, BrutException {
 		File f = new File(root);
 		if (f.isFile() && f.getName().endsWith("apk")) {
 			String apkFile = root;
-			String manifestFile = findManifest(f.getParent());
+			String manifestFile = extractManifest(f);
 			base.add(new AppSpec(apkFile, manifestFile));
 		} else if (f.isDirectory()) {
 			for (File g : f.listFiles()) {
@@ -71,19 +74,11 @@ public class MainAnalysis {
 		}
 	}
 
-	private static String findManifest(String root) {
-		File f = new File(root);
-		if (f.isFile() && f.getName().endsWith("AndroidManifest.xml")) {
-			return root;
-		} else if (f.isDirectory()) {
-			for (File g : f.listFiles()) {
-				String possibleManifest = findManifest(g.getAbsolutePath());
-				if (possibleManifest != null) {
-					return possibleManifest;
-				}
-			}
-		}
-		return null;
+	private static String extractManifest(File apkFile) throws IOException, InterruptedException, BrutException {
+		String[] args = new String[] {"d", "-f", apkFile.getAbsolutePath(), "-o", apkFile.getParent() + "/apktool"};
+		System.out.println(Arrays.toString(args));
+		brut.apktool.Main.main(args);
+		return apkFile.getParent() + "/apktool/AndroidManifest.xml";
 	}
 
 	public static void runAnalysisOn(AppSpec appSpec) {
