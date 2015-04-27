@@ -22,7 +22,7 @@ public class MainAnalysis {
 	
 	
 	
-	public static void main(String[] args) throws IOException, ClassHierarchyException, CancelException, UnsoundGraphException, InterruptedException, BrutException {
+	public static void main(String[] args) throws IOException, ClassHierarchyException, CancelException, UnsoundGraphException, InterruptedException, APKToolException {
 		runAnalysisOn(listApps("examples/apps"));
 		// runAnalysisOn("/home/mmohr-local/workspaces/ws-android/Simple1/Simple1.apk");
 	}
@@ -55,13 +55,13 @@ public class MainAnalysis {
 		}
 	}
 
-	public static List<AppSpec> listApps(String root) throws IOException, InterruptedException, BrutException {
+	public static List<AppSpec> listApps(String root) throws IOException, InterruptedException, APKToolException {
 		LinkedList<AppSpec> ret = new LinkedList<AppSpec>();
 		addAllAppsTo(root, ret);
 		return ret;
 	}
 
-	private static void addAllAppsTo(String root, List<AppSpec> base) throws IOException, InterruptedException, BrutException {
+	private static void addAllAppsTo(String root, List<AppSpec> base) throws IOException, InterruptedException, APKToolException {
 		File f = new File(root);
 		if (f.isFile() && f.getName().endsWith("apk")) {
 			File manifestFile = extractManifest(f);
@@ -73,10 +73,14 @@ public class MainAnalysis {
 		}
 	}
 
-	public static File extractManifest(File apkFile) throws IOException, InterruptedException, BrutException {
+	public static File extractManifest(File apkFile) throws IOException, InterruptedException, APKToolException {
 		String[] args = new String[] {"d", "-s", "-f", apkFile.getAbsolutePath(), "-o", apkFile.getParent() + "/apktool"};
 		System.out.println(Arrays.toString(args));
-		brut.apktool.Main.main(args);
+		try {
+			brut.apktool.Main.main(args);
+		} catch (BrutException e) {
+			throw new APKToolException(e);
+		}
 		return new File(apkFile.getParent() + "/apktool/AndroidManifest.xml");
 	}
 

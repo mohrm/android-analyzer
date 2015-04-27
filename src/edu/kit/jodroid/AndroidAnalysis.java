@@ -12,8 +12,6 @@ import java.util.jar.JarFile;
 
 import org.json.JSONException;
 
-import brut.common.BrutException;
-
 import com.ibm.wala.classLoader.IClass;
 import com.ibm.wala.classLoader.IMethod;
 import com.ibm.wala.classLoader.JarFileModule;
@@ -114,12 +112,12 @@ public class AndroidAnalysis {
 	private static TypeReference WebViewClient = TypeReference.findOrCreate(ClassLoaderReference.Primordial, "Landroid/webkit/WebViewClient");
 	private static Selector run = Selector.make("run()V");
 
-	public AndroidIFCAnalysis prepareAnalysis(File apkFile) throws IOException, CancelException, UnsoundGraphException, WalaException, JSONException, InterruptedException, BrutException {
+	public AndroidIFCAnalysis prepareAnalysis(File apkFile) throws IOException, CancelException, UnsoundGraphException, WalaException, JSONException, InterruptedException, APKToolException {
 		File manifestFile = MainAnalysis.extractManifest(apkFile);
 		return prepareAnalysis(new AppSpec(apkFile, manifestFile));
 	}
 
-	public Set<Pair<String, String>> runAnalysis(File apkFile) throws IOException, CancelException, UnsoundGraphException, WalaException, JSONException, InterruptedException, BrutException {
+	public Set<Pair<String, String>> runAnalysis(File apkFile) throws IOException, CancelException, UnsoundGraphException, WalaException, JSONException, InterruptedException, APKToolException {
 		AndroidIFCAnalysis a = prepareAnalysis(apkFile);
 		return a.check().getFlows();
 	}

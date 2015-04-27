@@ -1,8 +1,6 @@
 package edu.kit.jodroid;
 import java.io.IOException;
 
-import brut.common.BrutException;
-
 import com.ibm.wala.classLoader.IClass;
 import com.ibm.wala.classLoader.IMethod;
 import com.ibm.wala.dalvik.classLoader.DexIRFactory;
@@ -37,7 +35,7 @@ public class InspectIntentStrings {
 	    "getStringArrayExtra(Ljava/lang/String;)", "getStringArrayListExtra(Ljava/lang/String;)",
 	    "getStringExtra(Ljava/lang/String;)" };
 
-    public static void main(String[] args) throws IOException, ClassHierarchyException, InterruptedException, BrutException {
+    public static void main(String[] args) throws IOException, ClassHierarchyException, InterruptedException, APKToolException {
 	for (AppSpec appSpec : MainAnalysis.listApps("examples/apps")) {
 	    System.out.println(appSpec.apkFile + ":");
 	    AnalysisScope scope = AndroidAnalysis.makeMinimalScope(appSpec);

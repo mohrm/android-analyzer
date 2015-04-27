@@ -6,8 +6,6 @@ import java.util.Set;
 
 import org.json.JSONException;
 
-import brut.common.BrutException;
-
 import com.ibm.wala.util.CancelException;
 import com.ibm.wala.util.WalaException;
 import com.ibm.wala.util.graph.GraphIntegrity.UnsoundGraphException;
@@ -16,7 +14,7 @@ import edu.kit.joana.util.Pair;
 
 public class ShortAnalysis {
 
-	public static void main(String[] args) throws IOException, CancelException, UnsoundGraphException, WalaException, JSONException, InterruptedException, BrutException {
+	public static void main(String[] args) throws IOException, CancelException, UnsoundGraphException, WalaException, JSONException, InterruptedException, APKToolException {
 		AndroidAnalysis a = new AndroidAnalysis();
 		Set<Pair<String, String>> flows = a.runAnalysis(new File(args[0]));
 		System.out.println("found flows:");
