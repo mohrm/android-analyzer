@@ -8,7 +8,7 @@
 	<property name="classes" value="classes"/>
 	<property name="jar.file" value="android-analyzer.jar"/>
 
-	<target name="compile">
+	<target name="compile" depends="build-joana-libs">
 		<mkdir dir="${classes}"/>
 		<path id="lib.path.ref">
 			<fileset dir="lib" includes="*.jar" />
