@@ -8,6 +8,6 @@
 	<classpathentry kind="lib" path="lib/json.jar"/>
 	<classpathentry exported="true" kind="lib" path="lib/joana.api.jar"/>
 	<classpathentry kind="lib" path="lib/joana.wala.jodroid.jar"/>
-	<classpathentry kind="lib" path="lib/apktool.jar"/>
+	<classpathentry kind="lib" path="lib/apktool_2.0.0.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
