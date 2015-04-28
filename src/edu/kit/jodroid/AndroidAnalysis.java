@@ -93,6 +93,9 @@ public class AndroidAnalysis {
 		if (properties.getProperty(ANDROID_LIB) == null) {
 			throw new RuntimeException("Specify androidlib=<path to android lib jar>!");
 		}
+		if (properties.getProperty(POLICY_TEMPLATE) == null) {
+			throw new RuntimeException("Specify policytemplate=<path to policy template>!");
+		}
 	}
 	
 	public static class CallGraphKeeper implements CGConsumer {
