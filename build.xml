@@ -38,4 +38,12 @@
 		<delete dir="${classes}"/>
 		<delete file="${jar.file}"/>
 	</target>
+
+	<target name="build-joana-libs">
+		<ant antfile="joana/build.xml" target="init-wala" inheritall="false"/>
+		<ant antfile="joana/build.xml" target="joana.api" inheritall="false"/>
+		<copy todir="lib" file="joana/dist/joana.api.jar"/>
+		<ant antfile="joana/build.xml" target="joana.wala.jodroid" inheritall="false"/>
+		<copy todir="lib" file="joana/dist/joana.wala.jodroid.jar"/>
+	</target>
 </project>
