@@ -184,6 +184,7 @@
 		"Landroid/content/ContextWrapper;": {
 			"setters": [
 				"sendBroadcast(Landroid/content/Intent;)",
+				"startActivity(Landroid/content/Intent;)",
 				"startService(Landroid/content/Intent;)"
 			]
 		},
