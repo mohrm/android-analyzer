@@ -8,7 +8,7 @@
 	<property name="classes" value="classes"/>
 	<property name="jar.file" value="android-analyzer.jar"/>
 
-	<target name="compile" depends="build-joana-libs">
+	<target name="compile" depends="build-joana-libs,build-json,fetchApkTool">
 		<mkdir dir="${classes}"/>
 		<path id="lib.path.ref">
 			<fileset dir="lib" includes="*.jar" />
@@ -45,5 +45,14 @@
 		<copy todir="lib" file="joana/dist/joana.api.jar"/>
 		<ant antfile="joana/build.xml" target="joana.wala.jodroid" inheritall="false"/>
 		<copy todir="lib" file="joana/dist/joana.wala.jodroid.jar"/>
+	</target>
+
+	<target name="build-json">
+		<ant antfile="JSON-java/build.xml" inheritall="false"/>
+		<copy todir="lib" file="JSON-java/json.jar"/>
+	</target>
+
+	<target name="fetchApkTool">
+		<get src="https://bitbucket.org/iBotPeaches/apktool/downloads/apktool_2.0.0.jar" dest="lib"/>
 	</target>
 </project>

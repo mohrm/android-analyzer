@@ -1,3 +1,6 @@
 [submodule "joana"]
 	path = joana
 	url = https://github.com/jgf/joana
+[submodule "JSON-java"]
+	path = JSON-java
+	url = https://github.com/mohrm/JSON-java.git
