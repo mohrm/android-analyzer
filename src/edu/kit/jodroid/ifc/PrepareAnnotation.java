@@ -49,16 +49,15 @@ public class PrepareAnnotation {
 		final Map<String, Set<SDGNode>> cat2SrcNodes = new HashMap<String, Set<SDGNode>>();
 		final Map<String, Set<SDGNode>> cat2SnkNodes = new HashMap<String, Set<SDGNode>>();
 		for (Map.Entry<SourceOrSink, JavaMethodSignature> e : completedSigs.m.entrySet()) {
+			IClassHierarchy cha = callGraph.getClassHierarchy();
+			IClass clazz = cha.lookupClass(TypeReference.findOrCreate(ClassLoaderReference.Primordial, e.getValue().getDeclaringType().toBCString(false)));
+			if (clazz == null) {
+				System.out.println(e.getValue().getDeclaringType());
+				continue;
+			}
 			if (e.getKey().isParameterOfEntryPoint()) {
-				IClassHierarchy cha = callGraph.getClassHierarchy();
-				IClass c = cha.lookupClass(TypeReference.findOrCreate(ClassLoaderReference.Primordial,
-						e.getValue().getDeclaringType().toBCString(false)));
-				if (c == null) {
-					System.out.println(e.getValue().getDeclaringType());
-					continue;
-				}
 				for (IClass c0 : cha) {
-					if (c0.getClassLoader().getReference().equals(ClassLoaderReference.Application) && cha.isAssignableFrom(c, c0)) {
+					if (c0.getClassLoader().getReference().equals(ClassLoaderReference.Application) && cha.isAssignableFrom(clazz, c0)) {
 						IMethod m = c0.getMethod(Selector.make(e.getValue().getSelector()));
 						if (m != null) {
 							for (SDGMethod sdgMethod : program.getMethods(JavaMethodSignature.fromString(m.getSignature()))) {
@@ -92,69 +91,74 @@ public class PrepareAnnotation {
 					}
 				}
 			} else {
-				for (final SDGCall c : program.getCallsToMethod(e.getValue())) {
-					e.getKey().accept(new Visitor() {
+				for (IClass c0 : cha) {
+					if (cha.isAssignableFrom(clazz, c0)) {
+						IMethod m = c0.getMethod(Selector.make(e.getValue().getSelector()));
+						if (m != null) {
+							for (final SDGCall c : program.getCallsToMethod(JavaMethodSignature.fromString(m.getSignature()))) {
+								e.getKey().accept(new Visitor() {
+									@Override
+									public void visitSource(Source src) {
+										Set<SDGNode> nodes = new HashSet<SDGNode>();
+										for (SDGCallPart cp : translate(src)) {
+											nodes.addAll(program.getNodeCollector().collectNodes(cp, AnnotationType.SOURCE));
+										}
+										Set<SDGNode> base = lookupOrRegister(src.getCategory(), cat2SrcNodes);
+										base.addAll(nodes);
+									}
 
-						@Override
-						public void visitSource(Source src) {
-							Set<SDGNode> nodes = new HashSet<SDGNode>();
-							for (SDGCallPart cp : translate(src)) {
-								nodes.addAll(program.getNodeCollector().collectNodes(cp, AnnotationType.SOURCE));
-							}
-							Set<SDGNode> base = lookupOrRegister(src.getCategory(), cat2SrcNodes);
-							base.addAll(nodes);
-						}
+									@Override
+									public void visitSink(Sink snk) {
+										Set<SDGNode> nodes = new HashSet<SDGNode>();
+										for (SDGCallPart cp : translate(snk)) {
+											nodes.addAll(program.getNodeCollector().collectNodes(cp, AnnotationType.SINK));
+										}
+										Set<SDGNode> base = lookupOrRegister(snk.getCategory(), cat2SnkNodes);
+										base.addAll(nodes);
+									}
 
-						@Override
-						public void visitSink(Sink snk) {
-							Set<SDGNode> nodes = new HashSet<SDGNode>();
-							for (SDGCallPart cp : translate(snk)) {
-								nodes.addAll(program.getNodeCollector().collectNodes(cp, AnnotationType.SINK));
-							}
-							Set<SDGNode> base = lookupOrRegister(snk.getCategory(), cat2SnkNodes);
-							base.addAll(nodes);
-						}
+									private Set<SDGCallPart> translate(SourceOrSink poi) {
+										Set<SDGCallPart> actParams = new HashSet<SDGCallPart>();
+										int p = poi.getParams()[0];
+										if (p < 0) {
+											switch (p) {
+											case ParsePolicyFromJSON.SourceOrSink.THIS_PARAM:
+												if (c.getThis() != null)
+													actParams.add(c.getThis());
+												break;
+											case ParsePolicyFromJSON.SourceOrSink.RET_PARAM:
+												if (c.getReturn() != null)
+													actParams.add(c.getReturn());
+												break;
+											case ParsePolicyFromJSON.SourceOrSink.ALL_ARGUMENTS:
+												actParams.addAll(c.getActualParameters());
+												if (c.getThis() != null)
+													actParams.add(c.getThis());
+												if (c.getReturn() != null)
+													actParams.add(c.getReturn());
+												break;
+											}
+										} else {
+											actParams.add(c.getActualParameter(p));
+										}
+										return actParams;
+									}
 
-						private Set<SDGCallPart> translate(SourceOrSink poi) {
-							Set<SDGCallPart> actParams = new HashSet<SDGCallPart>();
-							int p = poi.getParams()[0];
-							if (p < 0) {
-								switch (p) {
-								case ParsePolicyFromJSON.SourceOrSink.THIS_PARAM:
-									if (c.getThis() != null)
-										actParams.add(c.getThis());
-									break;
-								case ParsePolicyFromJSON.SourceOrSink.RET_PARAM:
-									if (c.getReturn() != null)
-										actParams.add(c.getReturn());
-									break;
-								case ParsePolicyFromJSON.SourceOrSink.ALL_ARGUMENTS:
-									actParams.addAll(c.getActualParameters());
-									if (c.getThis() != null)
-										actParams.add(c.getThis());
-									if (c.getReturn() != null)
-										actParams.add(c.getReturn());
-									break;
-								}
-							} else {
-								actParams.add(c.getActualParameter(p));
+									private Set<SDGNode> lookupOrRegister(String category, Map<String, Set<SDGNode>> m) {
+										Set<SDGNode> ret = m.get(category);
+										if (ret == null) {
+											ret = new HashSet<SDGNode>();
+											m.put(category, ret);
+										}
+										return ret;
+									}
+								});
 							}
-							return actParams;
 						}
-
-						private Set<SDGNode> lookupOrRegister(String category, Map<String, Set<SDGNode>> m) {
-							Set<SDGNode> ret = m.get(category);
-							if (ret == null) {
-								ret = new HashSet<SDGNode>();
-								m.put(category, ret);
-							}
-							return ret;
-						}
-					});
+					}
 				}
 			}
 		}
-		
 		return new AnnotationPolicy(cat2SrcNodes, cat2SnkNodes, completedSigs);
 	}
 
