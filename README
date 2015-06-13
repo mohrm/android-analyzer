@@ -1,0 +1,17 @@
+Prerequisites:
+- JDK >= 7
+- ant >= 1.9.3
+- git >= 1.9.1
+
+
+1.) run
+git submodule update --init --recursive
+2.) import repo as project into eclipse
+There are to main classes
+1.) MainAnalysis - for batch processing multiple apps
+- place each app to be analyzed in a separate subfolder of examples/apps
+- run MainAnalysis
+2.) ShortAnalysis - for analysis of a single app
+- takes apk file of app as command-line argument
+
+In case of questions or problems, feel free to ask me: martin.mohr@kit.edu
