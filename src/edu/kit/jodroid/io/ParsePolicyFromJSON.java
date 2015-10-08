@@ -54,7 +54,7 @@ public class ParsePolicyFromJSON {
 		
 		protected abstract String kind();
 		
-		protected String params2String() {
+		public String params2String() {
 			if (params.length == 0) {
 				return "[]";
 			} else {

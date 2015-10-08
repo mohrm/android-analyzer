@@ -135,8 +135,8 @@ public class SrcSnkScanner {
 		}
 	}
 	public static class ScanResult {
-		private Set<Source> sources;
-		private Set<Sink> sinks;
+		public Set<Source> sources;
+		public Set<Sink> sinks;
 		public ScanResult(Set<Source> sources, Set<Sink> sinks) {
 			this.sources = sources;
 			this.sinks = sinks;

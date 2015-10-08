@@ -11,6 +11,8 @@ import com.ibm.wala.util.graph.GraphIntegrity.UnsoundGraphException;
 
 import edu.kit.jodroid.ifc.SrcSnkScanner.ScanResult;
 import edu.kit.jodroid.io.AppSpec;
+import edu.kit.jodroid.io.ParsePolicyFromJSON.Sink;
+import edu.kit.jodroid.io.ParsePolicyFromJSON.Source;
 
 
 public class QuickScanner {
@@ -19,6 +21,11 @@ public class QuickScanner {
 		File manifestFile = MainAnalysis.extractManifest(apkFile);
 		ScanResult scanResult = new AndroidAnalysis().justScan(new AppSpec(apkFile, manifestFile));
 		System.out.println();
-		scanResult.print(System.out);
+		for (Source src : scanResult.sources) {
+			System.out.println(String.format("%s|Source|%s|%s", args[1], src.getDeclaringClass()+"."+src.getMethod(), src.params2String()));
+		}
+		for (Sink snk : scanResult.sinks) {
+			System.out.println(String.format("%s|Sink|%s|%s", args[1], snk.getDeclaringClass()+"."+snk.getMethod(), snk.params2String()));
+		}
 	}
 }
