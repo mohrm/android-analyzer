@@ -1,1 +1,1 @@
-java -Xmx4G -cp lib/apktool.jar:lib/json.jar:lib/joana.wala.jodroid.jar:lib/joana.api.jar:res:android-analyzer.jar edu.kit.jodroid.ShortAnalysis $@
+java -Xmx4G -cp assets:lib/apktool.jar:lib/json.jar:lib/joana.wala.jodroid.jar:lib/joana.api.jar:res:android-analyzer.jar edu.kit.jodroid.ShortAnalysis $@
