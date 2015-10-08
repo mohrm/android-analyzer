@@ -65,9 +65,11 @@ import edu.kit.joana.wala.core.SDGBuilder.StaticInitializationTreatment;
 import edu.kit.joana.wala.flowless.pointsto.AliasGraph;
 import edu.kit.joana.wala.flowless.spec.java.ast.MethodInfo;
 import edu.kit.jodroid.ifc.AndroidIFCAnalysis;
+import edu.kit.jodroid.ifc.CGBasedSrcSnkScanner;
+import edu.kit.jodroid.ifc.CGBasedSrcSnkScanner.ScanResult;
+import edu.kit.jodroid.ifc.CHABasedSrcSnkScanner;
 import edu.kit.jodroid.ifc.PrepareAnnotation;
 import edu.kit.jodroid.ifc.SrcSnkScanner;
-import edu.kit.jodroid.ifc.SrcSnkScanner.ScanResult;
 import edu.kit.jodroid.io.AppSpec;
 import edu.kit.jodroid.io.ParsePolicyFromJSON;
 import edu.kit.jodroid.policy.IFCPolicy;
@@ -207,7 +209,15 @@ public class AndroidAnalysis {
 		SDGBuilderConfig scfg = makeSDGBuilderConfig(appSpec, keeper, true, true);
 		SDG sdg = SDGBuilder.build(scfg);
 		IFCPolicy policy = new ParsePolicyFromJSON(loadJSONPolicy()).run();
-		SrcSnkScanner scanner = new SrcSnkScanner(keeper.getCallGraph(), policy);
+		SrcSnkScanner scanner = new CGBasedSrcSnkScanner(keeper.getCallGraph(), policy);
+		return scanner.scan();
+	}
+
+	public ScanResult justScanFast(AppSpec appSpec) throws IOException, CancelException, UnsoundGraphException, WalaException, JSONException {
+		CallGraphKeeper keeper = new CallGraphKeeper();
+		SDGBuilderConfig scfg = makeSDGBuilderConfig(appSpec, keeper, true, true);
+		IFCPolicy policy = new ParsePolicyFromJSON(loadJSONPolicy()).run();
+		SrcSnkScanner scanner = new CHABasedSrcSnkScanner(scfg.cha, policy);
 		return scanner.scan();
 	}
 
