@@ -74,7 +74,16 @@ public class MainAnalysis {
 	}
 
 	public static File extractManifest(File apkFile) throws IOException, InterruptedException, APKToolException {
-		String[] args = new String[] {"d", "-s", "-f", apkFile.getAbsolutePath(), "-o", apkFile.getParent() + "/apktool"};
+		return extractManifest(apkFile, true);
+	}
+
+	public static File extractManifest(File apkFile, boolean quiet) throws IOException, InterruptedException, APKToolException {
+		String[] args;
+		if (quiet) {
+			args = new String[] {"-q", "d", "-s", "-f", apkFile.getAbsolutePath(), "-o", apkFile.getParent() + "/apktool"};
+		} else {
+			args = new String[] {"d", "-s", "-f", apkFile.getAbsolutePath(), "-o", apkFile.getParent() + "/apktool"};
+		}
 		try {
 			brut.apktool.Main.main(args);
 		} catch (BrutException e) {

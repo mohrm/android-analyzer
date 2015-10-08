@@ -18,7 +18,7 @@ import edu.kit.jodroid.io.ParsePolicyFromJSON.Source;
 public class QuickScanner {
 	public static void main(String[] args) throws JSONException, IOException, CancelException, UnsoundGraphException, WalaException, InterruptedException, APKToolException {
 		File apkFile = new File(args[0]);
-		File manifestFile = MainAnalysis.extractManifest(apkFile);
+		File manifestFile = MainAnalysis.extractManifest(apkFile, false);
 		ScanResult scanResult = new AndroidAnalysis().justScan(new AppSpec(apkFile, manifestFile));
 		System.out.println();
 		for (Source src : scanResult.sources) {
