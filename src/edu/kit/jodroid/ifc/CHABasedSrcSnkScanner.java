@@ -46,6 +46,9 @@ public class CHABasedSrcSnkScanner extends SrcSnkScanner {
 	}
 
 	private boolean mayOverride(MethodReference mr, MethodReference staticTarget) {
+		if (!mr.getSelector().equals(staticTarget.getSelector())) {
+			return false;
+		}
 		IClass testTgt = cha.lookupClass(mr.getDeclaringClass());
 		IClass staticTgt = cha.lookupClass(staticTarget.getDeclaringClass());
 		if (testTgt == null || staticTgt == null) {
