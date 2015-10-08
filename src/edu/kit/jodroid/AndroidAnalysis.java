@@ -64,6 +64,8 @@ import edu.kit.joana.wala.flowless.pointsto.AliasGraph;
 import edu.kit.joana.wala.flowless.spec.java.ast.MethodInfo;
 import edu.kit.jodroid.ifc.AndroidIFCAnalysis;
 import edu.kit.jodroid.ifc.PrepareAnnotation;
+import edu.kit.jodroid.ifc.SrcSnkScanner;
+import edu.kit.jodroid.ifc.SrcSnkScanner.ScanResult;
 import edu.kit.jodroid.io.AppSpec;
 import edu.kit.jodroid.io.ParsePolicyFromJSON;
 import edu.kit.jodroid.policy.IFCPolicy;
@@ -197,6 +199,15 @@ public class AndroidAnalysis {
 		PrepareAnnotation prepare = new PrepareAnnotation(keeper.getCallGraph(), sdg, policy);
 		AndroidIFCAnalysis ifc = new AndroidIFCAnalysis(sdg, prepare.computeAnnotation());
 		return ifc;
+	}
+
+	public ScanResult justScan(AppSpec appSpec) throws IOException, CancelException, UnsoundGraphException, WalaException, JSONException {
+		CallGraphKeeper keeper = new CallGraphKeeper();
+		SDGBuilderConfig scfg = makeSDGBuilderConfig(appSpec, keeper, true);
+		SDG sdg = SDGBuilder.build(scfg);
+		IFCPolicy policy = new ParsePolicyFromJSON(loadJSONPolicy()).run();
+		SrcSnkScanner scanner = new SrcSnkScanner(keeper.getCallGraph(), policy);
+		return scanner.scan();
 	}
 
 	public static AnalysisScope makeMinimalScope(AppSpec appSpec) throws IOException {
