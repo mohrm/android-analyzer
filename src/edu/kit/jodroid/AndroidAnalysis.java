@@ -140,7 +140,6 @@ public class AndroidAnalysis {
 		if (appSpec.manifestFile != null) {
 			new AndroidManifestXMLReader(appSpec.manifestFile);
 		}
-		System.out.println(AndroidEntryPointManager.MANAGER.getSeen());
 		IMethod lifecycle;
 		new AndroidPreFlightChecks(AndroidEntryPointManager.MANAGER, options, cha).all();
 		AndroidEntryPointManager.MANAGER.setModelBehavior(LoopKillAndroidModel.class);
