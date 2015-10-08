@@ -20,7 +20,6 @@ public class QuickScanner {
 		File apkFile = new File(args[0]);
 		File manifestFile = MainAnalysis.extractManifest(apkFile, true);
 		ScanResult scanResult = new AndroidAnalysis().justScan(new AppSpec(apkFile, manifestFile));
-		System.out.println();
 		for (Source src : scanResult.sources) {
 			System.out.println(String.format("%s|Source|%s|%s", args[1], src.getDeclaringClass()+"."+src.getMethod(), src.params2String()));
 		}
