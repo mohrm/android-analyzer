@@ -24,7 +24,7 @@ public class QuickScanner {
 			System.out.println(String.format("%s|Source|%s|%s|%s", args[1], src.getDeclaringClass()+"."+src.getMethod(), src.getCategory(), src.params2String()));
 		}
 		for (Sink snk : scanResult.sinks) {
-			System.out.println(String.format("%s|Sink|%s|%s|%s", args[1], snk.getDeclaringClass()+"."+snk.getMethod(), snk.getCategory(), snk.params2String()));
+			System.out.println(String.format("%s|Sink|%s|%s|%s", args[1], snk.getDeclaringClass()+"."+snk.getMethod(), snk.getCategory(), snk.params2String().replaceAll("\\s", "_")));
 		}
 	}
 }
