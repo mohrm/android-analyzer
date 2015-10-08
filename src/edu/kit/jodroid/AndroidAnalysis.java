@@ -1,9 +1,11 @@
 package edu.kit.jodroid;
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.PrintStream;
 import java.util.Collections;
 import java.util.EnumSet;
 import java.util.Properties;
@@ -129,7 +131,7 @@ public class AndroidAnalysis {
 		return a.check().getFlows();
 	}
 
-	public SDGBuilder.SDGBuilderConfig makeSDGBuilderConfig(AppSpec appSpec, CGConsumer consumer, boolean onlyCG) throws ClassHierarchyException, IOException, CancelException {
+	public SDGBuilder.SDGBuilderConfig makeSDGBuilderConfig(AppSpec appSpec, CGConsumer consumer, boolean silent, boolean onlyCG) throws ClassHierarchyException, IOException, CancelException {
 		AnalysisScope scope = makeMinimalScope(appSpec);
 		IClassHierarchy cha = ClassHierarchy.make(scope);
 		AnalysisCache cache = new AnalysisCache(new DexIRFactory());
@@ -145,7 +147,7 @@ public class AndroidAnalysis {
 		final AndroidModel modeller = new AndroidModel(cha, options, cache);
 		lifecycle = modeller.getMethodEncap();
 		final SDGBuilder.SDGBuilderConfig scfg = new SDGBuilder.SDGBuilderConfig();
-		scfg.out = System.out;
+		scfg.out = silent?new PrintStream(new ByteArrayOutputStream()):System.out;
 		scfg.scope = scope;
 		scfg.cache = cache;
 		scfg.cha = cha;
@@ -192,7 +194,7 @@ public class AndroidAnalysis {
 
 	public AndroidIFCAnalysis prepareAnalysis(AppSpec appSpec) throws IOException, CancelException, UnsoundGraphException, WalaException, JSONException {
 		CallGraphKeeper keeper = new CallGraphKeeper();
-		SDGBuilderConfig scfg = makeSDGBuilderConfig(appSpec, keeper, false);
+		SDGBuilderConfig scfg = makeSDGBuilderConfig(appSpec, keeper, false, false);
 		SDG sdg = SDGBuilder.build(scfg);
 		SDGSerializer.toPDGFormat(sdg, new FileOutputStream(appSpec.apkFile.getParent() + "/app.pdg"));
 		IFCPolicy policy = new ParsePolicyFromJSON(loadJSONPolicy()).run();
@@ -203,7 +205,7 @@ public class AndroidAnalysis {
 
 	public ScanResult justScan(AppSpec appSpec) throws IOException, CancelException, UnsoundGraphException, WalaException, JSONException {
 		CallGraphKeeper keeper = new CallGraphKeeper();
-		SDGBuilderConfig scfg = makeSDGBuilderConfig(appSpec, keeper, true);
+		SDGBuilderConfig scfg = makeSDGBuilderConfig(appSpec, keeper, true, true);
 		SDG sdg = SDGBuilder.build(scfg);
 		IFCPolicy policy = new ParsePolicyFromJSON(loadJSONPolicy()).run();
 		SrcSnkScanner scanner = new SrcSnkScanner(keeper.getCallGraph(), policy);
