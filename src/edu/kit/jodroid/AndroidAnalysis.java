@@ -39,6 +39,7 @@ import com.ibm.wala.ipa.callgraph.propagation.InstanceKey;
 import com.ibm.wala.ipa.callgraph.propagation.PointerAnalysis;
 import com.ibm.wala.ipa.callgraph.pruned.ApplicationLoaderPolicy;
 import com.ibm.wala.ipa.cha.ClassHierarchy;
+import com.ibm.wala.ipa.cha.ClassHierarchyException;
 import com.ibm.wala.ipa.cha.IClassHierarchy;
 import com.ibm.wala.ssa.SSAInvokeInstruction;
 import com.ibm.wala.types.ClassLoaderReference;
@@ -57,6 +58,7 @@ import edu.kit.joana.wala.core.SDGBuilder;
 import edu.kit.joana.wala.core.SDGBuilder.ExceptionAnalysis;
 import edu.kit.joana.wala.core.SDGBuilder.FieldPropagation;
 import edu.kit.joana.wala.core.SDGBuilder.PointsToPrecision;
+import edu.kit.joana.wala.core.SDGBuilder.SDGBuilderConfig;
 import edu.kit.joana.wala.core.SDGBuilder.StaticInitializationTreatment;
 import edu.kit.joana.wala.flowless.pointsto.AliasGraph;
 import edu.kit.joana.wala.flowless.spec.java.ast.MethodInfo;
@@ -70,9 +72,9 @@ public class AndroidAnalysis {
 	public static final String JDK_STUBS = "jdkstubs";
 	public static final String ANDROID_LIB = "androidlib";
 	public static final String POLICY_TEMPLATE = "policytemplate";
-	
+
 	static Properties properties;
-	
+
 	static {
 		File file = new File(AndroidAnalysis.class.getClassLoader().getResource("jodroid.properties").getFile());
 		FileInputStream fileInput = null;
@@ -97,7 +99,7 @@ public class AndroidAnalysis {
 			throw new RuntimeException("Specify policytemplate=<path to policy template>!");
 		}
 	}
-	
+
 	public static class CallGraphKeeper implements CGConsumer {
 		private CallGraph callGraph;
 
@@ -124,8 +126,8 @@ public class AndroidAnalysis {
 		AndroidIFCAnalysis a = prepareAnalysis(apkFile);
 		return a.check().getFlows();
 	}
-	
-	public AndroidIFCAnalysis prepareAnalysis(AppSpec appSpec) throws IOException, CancelException, UnsoundGraphException, WalaException, JSONException {
+
+	public SDGBuilder.SDGBuilderConfig makeSDGBuilderConfig(AppSpec appSpec, CGConsumer consumer, boolean onlyCG) throws ClassHierarchyException, IOException, CancelException {
 		AnalysisScope scope = makeMinimalScope(appSpec);
 		IClassHierarchy cha = ClassHierarchy.make(scope);
 		AnalysisCache cache = new AnalysisCache(new DexIRFactory());
@@ -170,7 +172,6 @@ public class AndroidAnalysis {
 				return false;
 			}
 		};
-		AndroidAnalysis.CallGraphKeeper keeper = new AndroidAnalysis.CallGraphKeeper();
 		scfg.exceptions = ExceptionAnalysis.INTERPROC;
 		scfg.prunecg = 2;
 		scfg.pruningPolicy = ApplicationLoaderPolicy.INSTANCE;
@@ -179,10 +180,17 @@ public class AndroidAnalysis {
 		scfg.fieldPropagation = FieldPropagation.OBJ_GRAPH;
 		scfg.computeInterference = false;
 		scfg.computeAllocationSites = false;
-		scfg.cgConsumer = keeper;
+		scfg.cgConsumer = consumer;
 		scfg.additionalContextSelector = new IntentContextSelector(cha);
 		scfg.additionalContextInterpreter = new IntentContextInterpreter(cha, options, cache);
 		scfg.localKillingDefs = false;
+		scfg.abortAfterCG = !onlyCG;
+		return scfg;
+	}
+
+	public AndroidIFCAnalysis prepareAnalysis(AppSpec appSpec) throws IOException, CancelException, UnsoundGraphException, WalaException, JSONException {
+		CallGraphKeeper keeper = new CallGraphKeeper();
+		SDGBuilderConfig scfg = makeSDGBuilderConfig(appSpec, keeper, false);
 		SDG sdg = SDGBuilder.build(scfg);
 		SDGSerializer.toPDGFormat(sdg, new FileOutputStream(appSpec.apkFile.getParent() + "/app.pdg"));
 		IFCPolicy policy = new ParsePolicyFromJSON(loadJSONPolicy()).run();
