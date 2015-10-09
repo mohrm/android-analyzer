@@ -1,0 +1,14 @@
+sudo: false
+
+install:
+    git submodule update --init --recursive
+    git submodule sync
+    pushd joana
+    git submodule sync
+    pushd contrib/wala
+    mvn compile
+    popd
+    popd
+    ant
+
+
