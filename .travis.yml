@@ -1,5 +1,5 @@
 language: android
-jdk: oraclejdk7
+jdk: oraclejdk8
 install:
     - git submodule update --init --recursive
     - git submodule sync
