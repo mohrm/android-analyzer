@@ -1,14 +1,21 @@
-sudo: false
-
+language: android
+jdk: oraclejdk7
 install:
     - git submodule update --init --recursive
     - git submodule sync
     - pushd joana
     - git submodule sync
     - pushd contrib/wala
+    - "mkdir -p com.ibm.wala.dalvik.test/lib"
+    - "find /usr/local -name dx.jar -exec cp '{}' com.ibm.wala.dalvik.test/lib/dx.jar ';'"
+
     - mvn compile
     - popd
     - popd
     - ant
+
+cache:
+    directories:
+        - $HOME/.m2
 
 
