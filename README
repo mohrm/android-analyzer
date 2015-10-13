@@ -7,7 +7,7 @@ Prerequisites:
 1.) run
 git submodule update --init --recursive
 2.) import repo as project into eclipse
-There are to main classes
+There are two main classes
 1.) MainAnalysis - for batch processing multiple apps
 - place each app to be analyzed in a separate subfolder of examples/apps
 - run MainAnalysis
