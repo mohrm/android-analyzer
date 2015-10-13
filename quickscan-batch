@@ -20,6 +20,7 @@ countSuccess=0
 echo "Applications with sources and sinks:" >> $SRCSNK_FILE
 echo "Applications that don't have sources and sinks:" >> $NOSRCSNK_FILE
 for app in $(find $apkdir -name "*.apk"); do
+    name=$(basename $app)
     echo "Running on $app" >> $ERROR_FILE
     echo "Running on $app" >> $OUTPUT_FILE
     echo "Running on $app"
