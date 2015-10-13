@@ -1,0 +1,61 @@
+#!/bin/bash
+if [ $# -lt 1 ]; then
+    echo "Please provide the directory of apks / the apk to analyse as the first parameter."
+    exit 1
+fi
+ERROR_FILE=errors.txt
+OUTPUT_FILE=output.txt
+CSV_FILE=results.csv
+SRCSNK_FILE=srcsnk.txt
+NOSRCSNK_FILE=nosrcsnk.txt
+
+apkdir=$1
+shift
+
+count=0
+countSrcSnk=0
+countError=0
+countTimeout=0
+countSuccess=0
+echo "Applications with sources and sinks:" >> $SRCSNK_FILE
+echo "Applications that don't have sources and sinks:" >> $NOSRCSNK_FILE
+for app in $(find $apkdir -name "*.apk"); do
+    echo "Running on $app" >> $ERROR_FILE
+    echo "Running on $app" >> $OUTPUT_FILE
+    echo "Running on $app"
+    output=$(./quickscan $app $@ 2>> $ERROR_FILE);
+    success=$?
+    ((count++))            
+    if [ $success -eq 0 ]; then
+        ((countSuccess++))
+        echo $output | grep -q "Source";
+        hasSrc=$?
+        echo $output | grep -q "Sink";
+        hasSnk=$?
+        if [ $hasSrc -eq 0 ] && [ $hasSnk -eq 0 ]; then
+            echo $name >> $SRCSNK_FILE
+            echo "Source and sink found." >> $OUTPUT_FILE
+            echo "Source and sink found."
+            ((countSrcSnk++))
+        else
+            echo $name >> $NOSRCSNK_FILE
+            echo "No src or no snk found." >> $OUTPUT_FILE
+        fi
+    else
+        if [ $success -eq 27 ]; then
+        	((countTimeout++))
+        	echo "Timeout analyzing application $app" >> $OUTPUT_FILE
+        	echo "Timeout analyzing application $app"        
+        else
+        	((countError++))
+        	echo "Error analyzing application $app" >> $OUTPUT_FILE
+        	echo "Error analyzing application $app"        	
+        fi
+    fi
+    for i in $output; do
+        echo $i >> $CSV_FILE
+    done
+    echo "Analyzed $count apps ($countSuccess successfull, $countError errors, $countTimeout timeout), found $countSrcSnk apps with sources and sinks."
+    echo "Analyzed $count apps ($countSuccess successfull, $countError errors, $countTimeout timeout), found $countSrcSnk apps with sources and sinks." >> $OUTPUT_FILE
+done
+
