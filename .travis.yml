@@ -1,0 +1,10 @@
+language: android
+jdk: oraclejdk8
+install:
+    - "git submodule update --init --recursive"
+    - "git submodule sync"
+    - "pushd joana"
+    - "git submodule sync"
+    - "popd"
+script:
+    - "ant"
