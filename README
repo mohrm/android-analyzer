@@ -6,6 +6,7 @@ Prerequisites:
 
 1.) run
 git submodule update --init --recursive
+2.) run "ant".
 2.) import repo as project into eclipse
 There are two main classes
 1.) MainAnalysis - for batch processing multiple apps
