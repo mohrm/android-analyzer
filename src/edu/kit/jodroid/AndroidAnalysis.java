@@ -189,7 +189,7 @@ public class AndroidAnalysis {
 		scfg.additionalContextSelector = new IntentContextSelector(cha);
 		scfg.additionalContextInterpreter = new IntentContextInterpreter(cha, options, cache);
 		scfg.localKillingDefs = false;
-		scfg.abortAfterCG = !onlyCG;
+		scfg.abortAfterCG = onlyCG;
 		return scfg;
 	}
 
