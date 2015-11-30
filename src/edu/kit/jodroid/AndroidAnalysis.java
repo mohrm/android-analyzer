@@ -40,6 +40,7 @@ import com.ibm.wala.ipa.callgraph.impl.Util;
 import com.ibm.wala.ipa.callgraph.propagation.InstanceKey;
 import com.ibm.wala.ipa.callgraph.propagation.PointerAnalysis;
 import com.ibm.wala.ipa.callgraph.pruned.ApplicationLoaderPolicy;
+import com.ibm.wala.ipa.callgraph.pruned.DoNotPrune;
 import com.ibm.wala.ipa.cha.ClassHierarchy;
 import com.ibm.wala.ipa.cha.ClassHierarchyException;
 import com.ibm.wala.ipa.cha.IClassHierarchy;
@@ -263,7 +264,10 @@ public class AndroidAnalysis {
 		AndroidEntryPointManager.ENTRIES = epl.getEntryPoints(cha);
 		for (IClass cl : cha.getImplementors(AndroidAnalysis.JavaLangRunnable)) {
 			if (cl.getClassLoader().getReference().equals(ClassLoaderReference.Application)) {
-				AndroidEntryPointManager.ENTRIES.add(new AndroidEntryPoint(ExecutionOrder.MIDDLE_OF_LOOP, cl.getMethod(AndroidAnalysis.run), cha));
+				IMethod runMethod = cl.getMethod(AndroidAnalysis.run);
+				if (runMethod != null) {
+					AndroidEntryPointManager.ENTRIES.add(new AndroidEntryPoint(ExecutionOrder.MIDDLE_OF_LOOP, runMethod, cha));
+				}
 			}
 		}
 		IClass webview = cha.lookupClass(AndroidAnalysis.WebViewClient);
