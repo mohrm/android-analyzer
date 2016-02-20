@@ -267,7 +267,7 @@ public class AndroidAnalysis {
 			if (cl.getClassLoader().getReference().equals(ClassLoaderReference.Application)) {
 				IMethod runMethod = cl.getMethod(AndroidAnalysis.run);
 				if (runMethod != null) {
-					AndroidEntryPointManager.ENTRIES.add(new AndroidEntryPoint(ExecutionOrder.MIDDLE_OF_LOOP, runMethod, cha));
+					AndroidEntryPointManager.ENTRIES.add(new AndroidEntryPoint(ExecutionOrder.MULTIPLE_TIMES_IN_LOOP, runMethod, cha));
 				}
 			}
 		}
