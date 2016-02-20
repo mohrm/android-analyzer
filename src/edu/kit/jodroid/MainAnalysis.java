@@ -80,9 +80,9 @@ public class MainAnalysis {
 	public static File extractManifest(File apkFile, boolean quiet) throws IOException, InterruptedException, APKToolException {
 		String[] args;
 		if (quiet) {
-			args = new String[] {"-q", "d", "-s", "-f", apkFile.getAbsolutePath(), "-o", apkFile.getParent() + "/apktool"};
+			args = new String[] {"-q", "d", "-f", apkFile.getAbsolutePath(), "-o", apkFile.getParent() + "/apktool"};
 		} else {
-			args = new String[] {"d", "-s", "-f", apkFile.getAbsolutePath(), "-o", apkFile.getParent() + "/apktool"};
+			args = new String[] {"d", "-f", apkFile.getAbsolutePath(), "-o", apkFile.getParent() + "/apktool"};
 		}
 		try {
 			brut.apktool.Main.main(args);
