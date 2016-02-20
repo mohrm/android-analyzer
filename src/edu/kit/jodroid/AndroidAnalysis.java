@@ -260,6 +260,7 @@ public class AndroidAnalysis {
 	private void populateEntryPoints(IClassHierarchy cha) {
 		Set<AndroidEntryPointLocator.LocatorFlags> entrypointLocatorFlags = EnumSet.noneOf(AndroidEntryPointLocator.LocatorFlags.class);
 		entrypointLocatorFlags.add(LocatorFlags.INCLUDE_CALLBACKS);
+		entrypointLocatorFlags.add(LocatorFlags.CB_HEURISTIC);
 		final AndroidEntryPointLocator epl = new AndroidEntryPointLocator(entrypointLocatorFlags);
 		AndroidEntryPointManager.ENTRIES = epl.getEntryPoints(cha);
 		for (IClass cl : cha.getImplementors(AndroidAnalysis.JavaLangRunnable)) {
@@ -267,14 +268,6 @@ public class AndroidAnalysis {
 				IMethod runMethod = cl.getMethod(AndroidAnalysis.run);
 				if (runMethod != null) {
 					AndroidEntryPointManager.ENTRIES.add(new AndroidEntryPoint(ExecutionOrder.MIDDLE_OF_LOOP, runMethod, cha));
-				}
-			}
-		}
-		IClass webview = cha.lookupClass(AndroidAnalysis.WebViewClient);
-		for (IClass cl : cha) {
-			if (cha.isAssignableFrom(webview, cl)) {
-				for (IMethod m : cl.getDeclaredMethods()) {
-					AndroidEntryPointManager.ENTRIES.add(new AndroidEntryPoint(ExecutionOrder.MIDDLE_OF_LOOP, m, cha));
 				}
 			}
 		}
