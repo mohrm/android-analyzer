@@ -195,8 +195,8 @@ public class ParsePolicyFromJSON {
 		public Set<String> getAllForbiddenStrings() {
 			return getAll(forbiddenStrings);
 		}
-		public Set<String> getForbiddenStringsFor(String category) {
-			return forbiddenStrings.get(category);
+		public boolean isForbiddenFor(String category, String value) {
+			return forbiddenStrings.get(category) != null && forbiddenStrings.get(category).contains(value);
 		}
 		public Set<String> getAllForbiddenUris() {
 			return getAll(forbiddenUris);
