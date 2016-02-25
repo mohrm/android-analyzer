@@ -9,13 +9,13 @@ import java.util.Collections;
 import java.util.EnumSet;
 import java.util.Properties;
 import java.util.Set;
-import java.util.jar.JarFile;
+import java.util.jar.JarInputStream;
 
 import org.json.JSONException;
 
 import com.ibm.wala.classLoader.IClass;
 import com.ibm.wala.classLoader.IMethod;
-import com.ibm.wala.classLoader.JarFileModule;
+import com.ibm.wala.classLoader.JarStreamModule;
 import com.ibm.wala.dalvik.classLoader.DexFileModule;
 import com.ibm.wala.dalvik.classLoader.DexIRFactory;
 import com.ibm.wala.dalvik.ipa.callgraph.androidModel.AndroidModel;
@@ -218,20 +218,20 @@ public class AndroidAnalysis {
 		AnalysisScope scope = AnalysisScope.createJavaAnalysisScope();
 		scope.setLoaderImpl(ClassLoaderReference.Primordial, "com.ibm.wala.dalvik.classLoader.WDexClassLoaderImpl");
 		scope.setLoaderImpl(ClassLoaderReference.Application, "com.ibm.wala.dalvik.classLoader.WDexClassLoaderImpl");
-		scope.addToScope(ClassLoaderReference.Primordial, new JarFileModule(loadJDKStubs()));
-		scope.addToScope(ClassLoaderReference.Primordial, new JarFileModule(loadAndroidLib()));
+		scope.addToScope(ClassLoaderReference.Primordial, new JarStreamModule(loadJDKStubs()));
+		scope.addToScope(ClassLoaderReference.Primordial, new JarStreamModule(loadAndroidLib()));
 		scope.addToScope(ClassLoaderReference.Application, DexFileModule.make(appSpec.apkFile));
 		return scope;
 	}
 
-	public static JarFile loadJDKStubs() throws IOException {
+	public static JarInputStream loadJDKStubs() throws IOException {
 		String jdkStubs = properties.getProperty(JDK_STUBS);
-		return new JarFile(AndroidAnalysis.class.getClassLoader().getResource(jdkStubs).getFile());
+		return new JarInputStream(AndroidAnalysis.class.getClassLoader().getResourceAsStream(jdkStubs));
 	}
 
-	public static JarFile loadAndroidLib() throws IOException {
+	public static JarInputStream loadAndroidLib() throws IOException {
 		String androidLib = properties.getProperty(ANDROID_LIB);
-		return new JarFile(AndroidAnalysis.class.getClassLoader().getResource(androidLib).getFile());
+		return new JarInputStream(AndroidAnalysis.class.getClassLoader().getResourceAsStream(androidLib));
 	}
 
 	public static File loadJSONPolicy() throws IOException {
