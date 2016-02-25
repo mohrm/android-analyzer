@@ -234,9 +234,9 @@ public class AndroidAnalysis {
 		return new JarInputStream(AndroidAnalysis.class.getClassLoader().getResourceAsStream(androidLib));
 	}
 
-	public static File loadJSONPolicy() throws IOException {
+	public static InputStream loadJSONPolicy() throws IOException {
 		String jsonPolicy = properties.getProperty(POLICY_TEMPLATE);
-		return new File(AndroidAnalysis.class.getClassLoader().getResource(jsonPolicy).getFile());
+		return AndroidAnalysis.class.getClassLoader().getResourceAsStream(jsonPolicy);
 	}
 	private AnalysisOptions configureOptions(AnalysisScope scope, IClassHierarchy cha) {
 		AnalysisOptions options = new AnalysisOptions(scope, null);

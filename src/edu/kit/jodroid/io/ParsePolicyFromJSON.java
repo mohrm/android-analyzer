@@ -4,6 +4,7 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -211,9 +212,9 @@ public class ParsePolicyFromJSON {
 		}
 	}
 	
-	private File policyFile;
+	private InputStream policyFile;
 	
-	public ParsePolicyFromJSON(File file) {
+	public ParsePolicyFromJSON(InputStream file) {
 		this.policyFile = file;
 	}
 
@@ -423,9 +424,8 @@ public class ParsePolicyFromJSON {
 		return ret;
 	}
 
-	private String readFromFile(File policyFile) throws IOException {
-		FileInputStream fis = new FileInputStream(policyFile);
-		BufferedReader bis = new BufferedReader(new InputStreamReader(fis));
+	private String readFromFile(InputStream policyFile) throws IOException {
+		BufferedReader bis = new BufferedReader(new InputStreamReader(policyFile));
 		StringBuilder sb = new StringBuilder();
 		String nextLine = bis.readLine();
 		while (nextLine != null) {
