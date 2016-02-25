@@ -1,10 +1,9 @@
 package edu.kit.jodroid;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.PrintStream;
 import java.util.Collections;
 import java.util.EnumSet;
@@ -40,7 +39,6 @@ import com.ibm.wala.ipa.callgraph.impl.Util;
 import com.ibm.wala.ipa.callgraph.propagation.InstanceKey;
 import com.ibm.wala.ipa.callgraph.propagation.PointerAnalysis;
 import com.ibm.wala.ipa.callgraph.pruned.ApplicationLoaderPolicy;
-import com.ibm.wala.ipa.callgraph.pruned.DoNotPrune;
 import com.ibm.wala.ipa.cha.ClassHierarchy;
 import com.ibm.wala.ipa.cha.ClassHierarchyException;
 import com.ibm.wala.ipa.cha.IClassHierarchy;
@@ -83,13 +81,7 @@ public class AndroidAnalysis {
 	static Properties properties;
 
 	static {
-		File file = new File(AndroidAnalysis.class.getClassLoader().getResource("jodroid.properties").getFile());
-		FileInputStream fileInput = null;
-		try {
-			fileInput = new FileInputStream(file);
-		} catch (FileNotFoundException e) {
-			throw new RuntimeException(e);
-		}
+		InputStream fileInput = AndroidAnalysis.class.getClassLoader().getResourceAsStream("jodroid.properties");
 		properties = new Properties();
 		try {
 			properties.load(fileInput);
