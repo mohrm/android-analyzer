@@ -120,7 +120,9 @@ public class ParsePolicyFromJSON {
 			s.sensitiveOn = sensitiveOn;
 			return s;
 		}
-		
+		public Set<Integer> getSensitiveOn() {
+			return sensitiveOn;
+		}
 		public Source withCategory(String cat) {
 			Source s = clone();
 			s.category = cat;
