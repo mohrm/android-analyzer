@@ -81,10 +81,10 @@ public class AndroidAnalysis {
 	static Properties properties;
 
 	static {
-		InputStream fileInput = AndroidAnalysis.class.getClassLoader().getResourceAsStream("jodroid.properties");
+		InputStream propStream = AndroidAnalysis.class.getClassLoader().getResourceAsStream("jodroid.properties");
 		properties = new Properties();
 		try {
-			properties.load(fileInput);
+			properties.load(propStream);
 		} catch (IOException e) {
 			throw new RuntimeException(e);
 		}
