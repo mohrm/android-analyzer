@@ -64,13 +64,16 @@ public class MainAnalysis {
 	private static void addAllAppsTo(String root, List<AppSpec> base) throws IOException, InterruptedException, APKToolException {
 		File f = new File(root);
 		if (f.isFile() && f.getName().endsWith("apk")) {
-			File manifestFile = extractManifest(f);
-			base.add(new AppSpec(f, manifestFile));
+			base.add(createAppSpecFrom(f));
 		} else if (f.isDirectory()) {
 			for (File g : f.listFiles()) {
 				addAllAppsTo(g.getAbsolutePath(), base);
 			}
 		}
+	}
+
+	public static AppSpec createAppSpecFrom(File apkFile) throws IOException, InterruptedException, APKToolException {
+		return new AppSpec(apkFile, extractManifest(apkFile));
 	}
 
 	public static File extractManifest(File apkFile) throws IOException, InterruptedException, APKToolException {
