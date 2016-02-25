@@ -9,8 +9,12 @@ import java.util.Set;
 
 import com.ibm.wala.classLoader.IClass;
 import com.ibm.wala.classLoader.IMethod;
+import com.ibm.wala.ipa.callgraph.CGNode;
 import com.ibm.wala.ipa.callgraph.CallGraph;
 import com.ibm.wala.ipa.cha.IClassHierarchy;
+import com.ibm.wala.ssa.IR;
+import com.ibm.wala.ssa.SSAAbstractInvokeInstruction;
+import com.ibm.wala.ssa.SymbolTable;
 import com.ibm.wala.types.ClassLoaderReference;
 import com.ibm.wala.types.Selector;
 import com.ibm.wala.types.TypeName;
@@ -93,7 +97,7 @@ public class PrepareAnnotation {
 			} else {
 				for (IClass c0 : cha) {
 					if (cha.isAssignableFrom(clazz, c0)) {
-						IMethod m = c0.getMethod(Selector.make(e.getValue().getSelector()));
+						final IMethod m = c0.getMethod(Selector.make(e.getValue().getSelector()));
 						if (m != null) {
 							for (final SDGCall c : program.getCallsToMethod(JavaMethodSignature.fromString(m.getSignature()))) {
 								e.getKey().accept(new Visitor() {
@@ -101,10 +105,56 @@ public class PrepareAnnotation {
 									public void visitSource(Source src) {
 										Set<SDGNode> nodes = new HashSet<SDGNode>();
 										for (SDGCallPart cp : translate(src)) {
-											nodes.addAll(program.getNodeCollector().collectNodes(cp, AnnotationType.SOURCE));
+											for (SDGNode n : program.getNodeCollector().collectNodes(cp, AnnotationType.SOURCE)) {
+												if (mayPassForbiddenValues(n, src, m)) {
+													nodes.add(n);
+												}
+											}
 										}
 										Set<SDGNode> base = lookupOrRegister(src.getCategory(), cat2SrcNodes);
 										base.addAll(nodes);
+									}
+
+									private boolean mayPassForbiddenValues(SDGNode n, Source src, IMethod target) {
+										// if the source is argument-insensitive, then return value is potentially high for its category
+										if (src.getSensitiveOn().isEmpty()) {
+											return true;
+										} else {
+											SDG sdg = program.getSDG();
+											// find out the call site - conservatively return true if this fails
+											SDGNode callSite = n.getKind()==SDGNode.Kind.CALL?n:sdg.getCallSiteFor(n);
+											if (callSite == null) return true;
+											SDGNode caller = sdg.getEntry(callSite);
+											if (caller == null) return true;
+											int cgNodeId = sdg.getCGNodeId(caller);
+											if (cgNodeId == SDG.UNDEFINED_CGNODEID) return true;
+											int callIIndex = sdg.getInstructionIndex(callSite);
+											if (callIIndex == SDG.UNDEFINED_IINDEX) return true;
+											CGNode callerNode = callGraph.getNode(cgNodeId);
+											if (callerNode == null) return true;
+											IR ir = callerNode.getIR();
+											if (ir == null) return true;
+											if (ir.getInstructions() == null) return true;
+											if (callIIndex < 0 || callIIndex >= ir.getInstructions().length) return true;
+											SymbolTable table = ir.getSymbolTable();
+											if (table == null) return true;
+											SSAAbstractInvokeInstruction invk = (SSAAbstractInvokeInstruction)ir.getInstructions()[callIIndex];
+											for (int i = 1; i < invk.getNumberOfUses(); i++) {
+												int p_i = invk.getUse(i);
+												if (!src.getSensitiveOn().contains(i)) continue; // ignore arguments which are not sensitive
+												if (!invk.getDeclaredTarget().getParameterType(i-1).getName().equals(TypeReference.JavaLangString.getName())) {
+													return true; // we only do strings, so be safe here when we encounter a non-string
+												}
+												if (!table.isStringConstant(p_i)) {
+													return true; // this value is a string but we don't know its value
+												}
+												String value_i = table.getStringValue(p_i);
+												if (policy.getForbidden().isForbiddenFor(src.getCategory(), value_i)) {
+													return true; // we actually pass a forbidden string for this category
+												}
+											}
+											return false;
+										}
 									}
 
 									@Override
