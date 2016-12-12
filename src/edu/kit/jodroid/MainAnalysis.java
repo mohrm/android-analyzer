@@ -64,7 +64,15 @@ public class MainAnalysis {
 	private static void addAllAppsTo(String root, List<AppSpec> base) throws IOException, InterruptedException, APKToolException {
 		File f = new File(root);
 		if (f.isFile() && f.getName().endsWith("apk")) {
-			base.add(createAppSpecFrom(f));
+			AppSpec a = null;
+			System.out.print("Creating app spec for " + f + "...");
+			try {
+				a = createAppSpecFrom(f);
+				System.out.println("SUCCESS!");
+			} catch (APKToolException e) {
+				System.out.println("FAILURE!");
+			};
+			if (a != null) base.add(a);
 		} else if (f.isDirectory()) {
 			for (File g : f.listFiles()) {
 				addAllAppsTo(g.getAbsolutePath(), base);
