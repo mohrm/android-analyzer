@@ -1,22 +1,21 @@
 package edu.kit.jodroid;
 import java.io.File;
 import java.io.IOException;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
-import brut.common.BrutException;
-
 import com.ibm.wala.ipa.cha.ClassHierarchyException;
 import com.ibm.wala.util.CancelException;
 import com.ibm.wala.util.graph.GraphIntegrity.UnsoundGraphException;
 
+import brut.common.BrutException;
 import edu.kit.jodroid.ifc.AndroidIFCAnalysis;
 import edu.kit.jodroid.ifc.IFCReport;
-import edu.kit.jodroid.io.AppSpec;
+import edu.kit.joana.wala.jodroid.io.AppSpec;
+import edu.kit.joana.wala.jodroid.io.apktool.APKToolException;
 
 public class MainAnalysis {
 	

@@ -11,6 +11,7 @@ import com.ibm.wala.util.WalaException;
 import com.ibm.wala.util.graph.GraphIntegrity.UnsoundGraphException;
 
 import edu.kit.joana.util.Pair;
+import edu.kit.joana.wala.jodroid.io.apktool.APKToolException;
 
 public class ShortAnalysis {
 

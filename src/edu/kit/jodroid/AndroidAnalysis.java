@@ -63,13 +63,14 @@ import edu.kit.joana.wala.core.SDGBuilder.SDGBuilderConfig;
 import edu.kit.joana.wala.core.SDGBuilder.StaticInitializationTreatment;
 import edu.kit.joana.wala.flowless.pointsto.AliasGraph;
 import edu.kit.joana.wala.flowless.spec.java.ast.MethodInfo;
+import edu.kit.joana.wala.jodroid.io.AppSpec;
+import edu.kit.joana.wala.jodroid.io.apktool.APKToolException;
 import edu.kit.jodroid.ifc.AndroidIFCAnalysis;
 import edu.kit.jodroid.ifc.CGBasedSrcSnkScanner;
 import edu.kit.jodroid.ifc.CGBasedSrcSnkScanner.ScanResult;
 import edu.kit.jodroid.ifc.CHABasedSrcSnkScanner;
 import edu.kit.jodroid.ifc.PrepareAnnotation;
 import edu.kit.jodroid.ifc.SrcSnkScanner;
-import edu.kit.jodroid.io.AppSpec;
 import edu.kit.jodroid.io.ParsePolicyFromJSON;
 import edu.kit.jodroid.policy.IFCPolicy;
 

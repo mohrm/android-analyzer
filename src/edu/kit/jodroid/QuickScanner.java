@@ -9,8 +9,9 @@ import com.ibm.wala.util.CancelException;
 import com.ibm.wala.util.WalaException;
 import com.ibm.wala.util.graph.GraphIntegrity.UnsoundGraphException;
 
+import edu.kit.joana.wala.jodroid.io.AppSpec;
+import edu.kit.joana.wala.jodroid.io.apktool.APKToolException;
 import edu.kit.jodroid.ifc.CGBasedSrcSnkScanner.ScanResult;
-import edu.kit.jodroid.io.AppSpec;
 import edu.kit.jodroid.io.ParsePolicyFromJSON.Sink;
 import edu.kit.jodroid.io.ParsePolicyFromJSON.Source;
 

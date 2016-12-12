@@ -16,7 +16,8 @@ import com.ibm.wala.ssa.SymbolTable;
 import com.ibm.wala.types.ClassLoaderReference;
 import com.ibm.wala.types.MethodReference;
 
-import edu.kit.jodroid.io.AppSpec;
+import edu.kit.joana.wala.jodroid.io.AppSpec;
+import edu.kit.joana.wala.jodroid.io.apktool.APKToolException;
 
 public class InspectIntentStrings {
     private static String[] intentMethods = { "getBooleanArrayExtra(Ljava/lang/String;)",
