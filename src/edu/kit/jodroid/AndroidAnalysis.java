@@ -125,9 +125,10 @@ public class AndroidAnalysis {
 		AndroidIFCAnalysis a = prepareAnalysis(apkFile);
 		return a.check().getFlows();
 	}
-
 	public SDGBuilder.SDGBuilderConfig makeSDGBuilderConfig(AppSpec appSpec, CGConsumer consumer, boolean silent, boolean onlyCG) throws ClassHierarchyException, IOException, CancelException {
-		AnalysisScope scope = makeMinimalScope(appSpec);
+		return makeSDGBuilderConfig(appSpec, makeMinimalScope(appSpec), consumer, silent, onlyCG);
+	}
+	public SDGBuilder.SDGBuilderConfig makeSDGBuilderConfig(AppSpec appSpec, AnalysisScope scope, CGConsumer consumer, boolean silent, boolean onlyCG) throws ClassHierarchyException, IOException, CancelException {
 		IClassHierarchy cha = ClassHierarchy.make(scope);
 		AnalysisCache cache = new AnalysisCache(new DexIRFactory());
 		AnalysisOptions options = configureOptions(scope, cha);
