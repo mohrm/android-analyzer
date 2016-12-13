@@ -1,5 +1,9 @@
 language: android
 jdk: oraclejdk8
+addons:
+  apt:
+    packages:
+      - oracle-java8-installer
 install:
     - "git submodule update --init --recursive"
     - "git submodule sync"
